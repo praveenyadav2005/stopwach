@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StopWatch</title>
+    <title>Stopwatch</title>
   </head>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
-    /* font-family: "Poppins", sans-serif; */
+    
 
     * {
       padding: 0;
@@ -15,7 +15,7 @@
       box-sizing: border-box;
       font-family: "Poppins", sans-serif;
       transition: all .5s ease;
-      /* border: 2px solid red; */
+     
     }
     body {
       height: 100vh;
@@ -91,7 +91,8 @@
     }
   </style>
   <body>
-    <h1>StopWatch</h1>
+
+    <h1>Timer</h1>
     <div class="main-cont">
       <p id="count">31</p>
       <div class="buttons">
@@ -118,15 +119,27 @@
     const countPara = document.getElementById("count");
     const stopDiv = document.querySelector(".stops");
 
-    let count = 0;
-    countPara.innerText = count;
+    let secCount = 0;
+    let minCount=0;
+    let hourCount=0;
+    countPara.innerText = `${hourCount}:${minCount}:${secCount}`;
 
 
 
     
     const UpdateCount = () => {
-      count++;
-      countPara.innerText = count;
+      secCount++;
+      if(secCount>=60){
+        secCount=0;
+        minCount++;
+      }
+      if(minCount>=60){
+        secCount=0;
+        minCount=0;
+        hourCount++
+      }
+      countPara.innerText = `${hourCount}:${minCount}:${secCount}`;
+
     };
 
     const MakeStop = (timeC, stopC) => {
@@ -147,22 +160,25 @@
           start = 0;
         }
       } else if (e.target.classList.contains("stop_btn")) {
-        if (count) {
+        if (secCount||minCount||hourCount) {
           clearInterval(intervalId);
           start = 1;
         }
       } else if (e.target.classList.contains("reset_btn")) {
-        if (count) {
+        if (secCount||minCount||hourCount) {
           clearInterval(intervalId);
-          count = 0;
+          secCount=0;
+          minCount=0;
+          hourCount=0;
+          stopCount=0;
           countPara.innerText = count;
           stopDiv.innerHTML = "";
           start=1
         }
       } else if (e.target.classList.contains("getTime_btn")) {
-        if (count) {
+        if (secCount||minCount||hourCount) {
           stopCount++;
-          MakeStop(count, stopCount);
+          MakeStop( `${hourCount}:${minCount}:${secCount}`, stopCount);
         }
       } else if (e.target.classList.contains("clearTime_btn")) {
         stopDiv.innerHTML = "";
@@ -176,3 +192,4 @@
     })
   </script>
 </html>
+
